@@ -321,6 +321,18 @@
       text-align: center;
     }
 
+    @media (max-width: 768px) {
+      #pricing > div[style*="grid"] {
+        grid-template-columns: 1fr 1fr !important;
+      }
+    }
+
+    @media (max-width: 480px) {
+      #pricing > div[style*="grid"] {
+        grid-template-columns: 1fr !important;
+      }
+    }
+
     .pricing-card {
       background: var(--bg-2);
       border: 1px solid var(--border-light);
@@ -620,28 +632,90 @@
 
     <!-- Pricing -->
     <section id="pricing">
-      <div class="pricing-wrap">
-        <div class="section-label" style="text-align: center;">Simple pricing</div>
-        <h2 class="section-title" style="text-align: center;">Pay as you grow</h2>
-        <p class="section-sub" style="text-align: center; margin-bottom: 36px;">Start free. Scale with your active users.</p>
-        <div class="pricing-card">
-          <div class="price">$5<span>/mo</span></div>
-          <p class="price-sub">+ $0.50 per 100 active users/month</p>
-          <ul class="pricing-features">
-            <li><span class="check">✓</span> Unlimited API calls</li>
-            <li><span class="check">✓</span> Unlimited apps</li>
+      <div class="section-label" style="text-align: center;">Simple pricing</div>
+      <h2 class="section-title" style="text-align: center;">Pay as you grow</h2>
+      <p class="section-sub" style="text-align: center; margin-bottom: 40px;">Flat monthly pricing. No percentage of revenue. No surprises.</p>
+
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; max-width: 960px; margin: 0 auto;">
+
+        <!-- Free -->
+        <div class="pricing-card" style="padding: 24px; display: flex; flex-direction: column;">
+          <div style="font-size: 13px; font-weight: 700; margin-bottom: 8px;">Free</div>
+          <div class="price" style="font-size: 32px; margin-bottom: 4px;">$0<span style="font-size: 14px;">/mo</span></div>
+          <p class="price-sub" style="margin-bottom: 20px;">Get started, no card needed</p>
+          <ul class="pricing-features" style="flex: 1; margin-bottom: 20px;">
+            <li><span class="check">✓</span> 3 apps</li>
+            <li><span class="check">✓</span> 100 users</li>
             <li><span class="check">✓</span> Full ledger history</li>
-            <li><span class="check">✓</span> Stripe webhook integration</li>
-            <li><span class="check">✓</span> Developer dashboard</li>
-            <li><span class="check">✓</span> First 100 users free</li>
+            <li><span class="check">✓</span> Community support</li>
           </ul>
           <a href="https://tally-dashboard-beta.vercel.app/auth" style="display: block;">
-            <button class="btn" style="width: 100%; padding: 14px; font-size: 14px; justify-content: center;">
-              Get started free →
+            <button class="btn-ghost" style="width: 100%; padding: 12px; font-size: 13px; text-align: center; cursor: pointer;">
+              Start free →
             </button>
           </a>
         </div>
+
+        <!-- Starter -->
+        <div class="pricing-card" style="padding: 24px; display: flex; flex-direction: column;">
+          <div style="font-size: 13px; font-weight: 700; margin-bottom: 8px;">Starter</div>
+          <div class="price" style="font-size: 32px; margin-bottom: 4px;">$9<span style="font-size: 14px;">/mo</span></div>
+          <p class="price-sub" style="margin-bottom: 20px;">For indie developers</p>
+          <ul class="pricing-features" style="flex: 1; margin-bottom: 20px;">
+            <li><span class="check">✓</span> Unlimited apps</li>
+            <li><span class="check">✓</span> 1,000 users</li>
+            <li><span class="check">✓</span> Full ledger history</li>
+            <li><span class="check">✓</span> Email support</li>
+          </ul>
+          <a href="https://tally-dashboard-beta.vercel.app/auth" style="display: block;">
+            <button class="btn-ghost" style="width: 100%; padding: 12px; font-size: 13px; text-align: center; cursor: pointer;">
+              Get started →
+            </button>
+          </a>
+        </div>
+
+        <!-- Growth (popular) -->
+        <div class="pricing-card" style="padding: 24px; display: flex; flex-direction: column; border-color: rgba(0,255,136,0.3); position: relative;">
+          <div style="position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: #00ff88; color: #000; font-size: 10px; font-weight: 700; padding: 3px 12px; border-radius: 20px; white-space: nowrap; font-family: 'DM Mono', monospace;">MOST POPULAR</div>
+          <div style="font-size: 13px; font-weight: 700; margin-bottom: 8px;">Growth</div>
+          <div class="price" style="font-size: 32px; margin-bottom: 4px; color: #00ff88;">$29<span style="font-size: 14px; color: var(--text-3);">/mo</span></div>
+          <p class="price-sub" style="margin-bottom: 20px;">For growing products</p>
+          <ul class="pricing-features" style="flex: 1; margin-bottom: 20px;">
+            <li><span class="check">✓</span> Unlimited apps</li>
+            <li><span class="check">✓</span> 10,000 users</li>
+            <li><span class="check">✓</span> Full ledger history</li>
+            <li><span class="check">✓</span> Priority support</li>
+          </ul>
+          <a href="https://tally-dashboard-beta.vercel.app/auth" style="display: block;">
+            <button class="btn" style="width: 100%; padding: 12px; font-size: 13px; justify-content: center;">
+              Get started →
+            </button>
+          </a>
+        </div>
+
+        <!-- Scale -->
+        <div class="pricing-card" style="padding: 24px; display: flex; flex-direction: column;">
+          <div style="font-size: 13px; font-weight: 700; margin-bottom: 8px;">Scale</div>
+          <div class="price" style="font-size: 32px; margin-bottom: 4px;">$79<span style="font-size: 14px;">/mo</span></div>
+          <p class="price-sub" style="margin-bottom: 20px;">For scaling teams</p>
+          <ul class="pricing-features" style="flex: 1; margin-bottom: 20px;">
+            <li><span class="check">✓</span> Unlimited apps</li>
+            <li><span class="check">✓</span> Unlimited users</li>
+            <li><span class="check">✓</span> Full ledger history</li>
+            <li><span class="check">✓</span> SLA + priority support</li>
+          </ul>
+          <a href="https://tally-dashboard-beta.vercel.app/auth" style="display: block;">
+            <button class="btn-ghost" style="width: 100%; padding: 12px; font-size: 13px; text-align: center; cursor: pointer;">
+              Get started →
+            </button>
+          </a>
+        </div>
+
       </div>
+
+      <p style="text-align: center; margin-top: 24px; font-size: 12px; color: var(--text-3); font-family: 'DM Mono', monospace;">
+        Flat monthly pricing. No percentage of revenue. No sales calls.
+      </p>
     </section>
 
     <hr />
