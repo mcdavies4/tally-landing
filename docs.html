@@ -377,6 +377,7 @@
       <div class="nav-label">Guides</div>
       <a href="#idempotency" class="nav-link">Idempotency</a>
       <a href="#errors" class="nav-link">Error handling</a>
+      <a href="#displaying" class="nav-link">Displaying credits</a>
     </div>
   </aside>
 
@@ -784,6 +785,123 @@ creditsDisplay.textContent = <span class="c-string">`<span class="c-accent">${ba
             </tr>
           </tbody>
         </table>
+      </div>
+    </div>
+
+
+    <hr />
+
+    <!-- Displaying credits in UI -->
+    <div class="section" id="displaying">
+      <div class="section-tag">Guides</div>
+      <h2>Displaying credits in your UI</h2>
+      <p>Tally stores and manages the balance. Showing it to your users is your job — here are the three patterns developers use.</p>
+
+      <h3 style="margin: 24px 0 10px;">Option A — Fetch on page load</h3>
+      <p>The simplest approach. When the user loads your app, fetch their balance from your backend which proxies to Tally.</p>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">Your backend (Node.js)</span><button class="copy-btn" onclick="copy(this,'')">copy</button></div>
+        <pre><span class="c-comment">// Your backend route — never expose API key to frontend</span>
+app.get(<span class="c-string">'/api/credits'</span>, authenticate, <span class="c-keyword">async</span> (req, res) => {
+  <span class="c-keyword">const</span> response = <span class="c-keyword">await</span> fetch(
+    <span class="c-string">`https://api.usetally.dev/credits/balance?user_id=<span class="c-accent">${req.user.id}</span>`</span>,
+    { headers: { <span class="c-string">'Authorization'</span>: <span class="c-string">`Bearer ${process.env.TALLY_API_KEY}`</span> } }
+  )
+  <span class="c-keyword">const</span> { balance } = <span class="c-keyword">await</span> response.json()
+  res.json({ balance })
+})</pre>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">Your frontend (React)</span><button class="copy-btn" onclick="copy(this,'')">copy</button></div>
+        <pre><span class="c-keyword">const</span> [credits, setCredits] = useState(<span class="c-number">0</span>)
+
+useEffect(() => {
+  <span class="c-keyword">async function</span> loadCredits() {
+    <span class="c-keyword">const</span> { balance } = <span class="c-keyword">await</span> fetch(<span class="c-string">'/api/credits'</span>).then(r => r.json())
+    setCredits(balance)
+  }
+  loadCredits()
+}, [])
+
+<span class="c-comment">// In your UI</span>
+<span class="c-keyword">return</span> &lt;div&gt;{credits.toLocaleString()} credits remaining&lt;/div&gt;</pre>
+      </div>
+
+      <h3 style="margin: 24px 0 10px;">Option B — Update instantly after each action</h3>
+      <p>The best user experience. Since <code>/credits/deduct</code> returns <code>balance_after</code>, you can update the UI immediately without an extra fetch.</p>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">Your backend (Node.js)</span><button class="copy-btn" onclick="copy(this,'')">copy</button></div>
+        <pre><span class="c-comment">// When user triggers an action in your app</span>
+app.post(<span class="c-string">'/api/generate'</span>, authenticate, <span class="c-keyword">async</span> (req, res) => {
+  <span class="c-keyword">const</span> response = <span class="c-keyword">await</span> fetch(<span class="c-string">'https://api.usetally.dev/credits/deduct'</span>, {
+    method: <span class="c-string">'POST'</span>,
+    headers: {
+      <span class="c-string">'Authorization'</span>: <span class="c-string">`Bearer ${process.env.TALLY_API_KEY}`</span>,
+      <span class="c-string">'Content-Type'</span>: <span class="c-string">'application/json'</span>,
+    },
+    body: JSON.stringify({ user_id: req.user.id, amount: <span class="c-number">10</span>, description: <span class="c-string">'AI generation'</span> })
+  })
+
+  <span class="c-keyword">const</span> data = <span class="c-keyword">await</span> response.json()
+
+  <span class="c-keyword">if</span> (!data.success) {
+    <span class="c-keyword">return</span> res.status(<span class="c-number">402</span>).json({
+      error: <span class="c-string">'Insufficient credits'</span>,
+      balance: data.balance
+    })
+  }
+
+  <span class="c-comment">// Do the actual work here (generate image, call AI, etc.)</span>
+  <span class="c-keyword">const</span> result = <span class="c-keyword">await</span> doTheWork()
+
+  <span class="c-comment">// Return result AND new balance so frontend can update instantly</span>
+  res.json({ result, <span class="c-accent">balance: data.balance_after</span> })
+})</pre>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">Your frontend (React)</span><button class="copy-btn" onclick="copy(this,'')">copy</button></div>
+        <pre><span class="c-keyword">const</span> handleGenerate = <span class="c-keyword">async</span> () => {
+  <span class="c-keyword">const</span> data = <span class="c-keyword">await</span> fetch(<span class="c-string">'/api/generate'</span>, { method: <span class="c-string">'POST'</span> }).then(r => r.json())
+
+  <span class="c-keyword">if</span> (data.error === <span class="c-string">'Insufficient credits'</span>) {
+    showUpgradeModal()
+    <span class="c-keyword">return</span>
+  }
+
+  <span class="c-comment">// Update balance instantly — no extra fetch needed</span>
+  <span class="c-accent">setCredits(data.balance)</span>
+  showResult(data.result)
+}</pre>
+      </div>
+
+      <h3 style="margin: 24px 0 10px;">Option C — Refresh after payment</h3>
+      <p>After a user pays and is redirected back to your app, refetch their balance so it reflects the new credits from the webhook.</p>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">Your frontend (React)</span><button class="copy-btn" onclick="copy(this,'')">copy</button></div>
+        <pre><span class="c-comment">// On your payment success page / redirect handler</span>
+useEffect(() => {
+  <span class="c-keyword">if</span> (searchParams.get(<span class="c-string">'payment'</span>) === <span class="c-string">'success'</span>) {
+    <span class="c-comment">// Wait briefly for webhook to process, then refresh</span>
+    setTimeout(<span class="c-keyword">async</span> () => {
+      <span class="c-keyword">const</span> { balance } = <span class="c-keyword">await</span> fetch(<span class="c-string">'/api/credits'</span>).then(r => r.json())
+      setCredits(balance)
+      showSuccessMessage(<span class="c-string">`Credits added! You now have ${balance} credits.`</span>)
+    }, <span class="c-number">2000</span>) <span class="c-comment">// 2 second delay for webhook to land</span>
+  }
+}, [])</pre>
+      </div>
+
+      <div class="alert alert-tip">
+        ✓ Most apps combine all three — fetch on load, update after each action, and refresh after payment. This gives users an always-accurate balance with zero extra API calls.
+      </div>
+
+      <div class="alert alert-warn">
+        ⚠ Never call the Tally API directly from your frontend. Always proxy through your backend to keep your API key secret.
       </div>
     </div>
 
