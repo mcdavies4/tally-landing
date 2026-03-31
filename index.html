@@ -3,8 +3,35 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Primary SEO -->
   <title>Tally — Credit Layer API for Developers</title>
-  <meta name="description" content="Stop rebuilding credit logic. Add, deduct and refund user credits in 3 API calls. Works with Stripe, Polar, and Lemon Squeezy." />
+  <meta name="description" content="Stop rebuilding credit logic. Add, deduct and refund user credits in 3 API calls. Works with Stripe, Polar, and Lemon Squeezy. Free to start." />
+  <meta name="keywords" content="credit API, usage-based billing, SaaS credits, developer tools, Stripe credits, credit balance API, credit tracking" />
+  <meta name="author" content="The 36th Company Ltd" />
+  <link rel="canonical" href="https://tally-landing-ochre.vercel.app" />
+
+  <!-- Open Graph (Facebook, WhatsApp, LinkedIn, iMessage) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://tally-landing-ochre.vercel.app" />
+  <meta property="og:title" content="Tally — Credit Layer API for Developers" />
+  <meta property="og:description" content="Stop rebuilding credit logic. Add, deduct and refund user credits in 3 API calls. Works with Stripe, Polar, and Lemon Squeezy." />
+  <meta property="og:image" content="https://tally-landing-ochre.vercel.app/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:site_name" content="Tally" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://tally-landing-ochre.vercel.app" />
+  <meta name="twitter:title" content="Tally — Credit Layer API for Developers" />
+  <meta name="twitter:description" content="Stop rebuilding credit logic. Add, deduct and refund user credits in 3 API calls. Works with Stripe, Polar, and Lemon Squeezy." />
+  <meta name="twitter:image" content="https://tally-landing-ochre.vercel.app/og-image.png" />
+  <meta name="twitter:creator" content="@your_twitter_handle" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230a0a0a'/><text y='.9em' font-size='80' x='10'>T</text></svg>" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -27,14 +54,19 @@
       --font-mono: 'DM Mono', monospace;
     }
 
-    html { scroll-behavior: smooth; }
+    html {
+      scroll-behavior: smooth;
+      background: #0a0a0a;
+      color: #f0f0f0;
+    }
 
     body {
-      background: var(--bg);
-      color: var(--text);
+      background: #0a0a0a !important;
+      color: #f0f0f0 !important;
       font-family: var(--font-display);
       -webkit-font-smoothing: antialiased;
       line-height: 1.5;
+      min-height: 100vh;
     }
 
     a { color: inherit; text-decoration: none; }
@@ -48,7 +80,7 @@
       border-bottom: 1px solid var(--border);
       position: sticky;
       top: 0;
-      background: rgba(10,10,10,0.9);
+      background: rgba(10,10,10,0.95) !important;
       backdrop-filter: blur(12px);
       z-index: 100;
     }
@@ -411,8 +443,8 @@
       inset: 0;
       pointer-events: none;
       background-image:
-        linear-gradient(var(--border) 1px, transparent 1px),
-        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+        linear-gradient(#1a1a1a 1px, transparent 1px),
+        linear-gradient(90deg, #1a1a1a 1px, transparent 1px);
       background-size: 52px 52px;
       opacity: 0.25;
       z-index: 0;

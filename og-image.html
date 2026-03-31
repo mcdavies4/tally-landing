@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=1200" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      width: 1200px;
+      height: 630px;
+      background: #0a0a0a;
+      font-family: 'Syne', sans-serif;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Grid background */
+    .grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(#1a1a1a 1px, transparent 1px),
+        linear-gradient(90deg, #1a1a1a 1px, transparent 1px);
+      background-size: 60px 60px;
+      opacity: 0.4;
+    }
+
+    /* Accent glow */
+    .glow {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,255,136,0.08) 0%, transparent 70%);
+      top: -200px;
+      right: -100px;
+    }
+
+    .content {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 60px 80px;
+    }
+
+    /* Top row */
+    .top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: 800;
+      color: #00ff88;
+      letter-spacing: -1px;
+    }
+
+    .badge {
+      background: rgba(0,255,136,0.08);
+      border: 1px solid rgba(0,255,136,0.2);
+      color: #00ff88;
+      font-size: 13px;
+      font-family: 'DM Mono', monospace;
+      padding: 6px 16px;
+      border-radius: 20px;
+    }
+
+    /* Middle */
+    .middle { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+
+    h1 {
+      font-size: 72px;
+      font-weight: 800;
+      color: #f0f0f0;
+      letter-spacing: -3px;
+      line-height: 1.05;
+      margin-bottom: 24px;
+    }
+
+    h1 span { color: #00ff88; }
+
+    .subtitle {
+      font-size: 22px;
+      color: #666;
+      font-family: 'DM Mono', monospace;
+      font-weight: 400;
+      max-width: 700px;
+      line-height: 1.5;
+    }
+
+    /* Bottom */
+    .bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .endpoints {
+      display: flex;
+      gap: 12px;
+    }
+
+    .endpoint {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #111;
+      border: 1px solid #1a1a1a;
+      border-radius: 6px;
+      padding: 10px 16px;
+    }
+
+    .method {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: rgba(0,255,136,0.1);
+      color: #00ff88;
+    }
+
+    .path {
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      color: #888;
+    }
+
+    .providers {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .provider {
+      background: #111;
+      border: 1px solid #1a1a1a;
+      border-radius: 6px;
+      padding: 8px 16px;
+      font-size: 13px;
+      font-family: 'DM Mono', monospace;
+      color: #555;
+    }
+
+    .provider-label {
+      font-size: 11px;
+      color: #333;
+      font-family: 'DM Mono', monospace;
+      margin-right: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="grid"></div>
+  <div class="glow"></div>
+
+  <div class="content">
+    <div class="top">
+      <div class="logo">tally</div>
+      <div class="badge">credit layer api · free to start</div>
+    </div>
+
+    <div class="middle">
+      <h1>Stop rebuilding<br><span>credit logic.</span></h1>
+      <p class="subtitle">Add, deduct and refund user credits in 3 API calls.<br>Works with Stripe, Polar, and Lemon Squeezy.</p>
+    </div>
+
+    <div class="bottom">
+      <div class="endpoints">
+        <div class="endpoint">
+          <span class="method">POST</span>
+          <span class="path">/credits/add</span>
+        </div>
+        <div class="endpoint">
+          <span class="method">POST</span>
+          <span class="path">/credits/deduct</span>
+        </div>
+        <div class="endpoint">
+          <span class="method">POST</span>
+          <span class="path">/credits/refund</span>
+        </div>
+      </div>
+
+      <div class="providers">
+        <span class="provider-label">works with</span>
+        <div class="provider">Stripe</div>
+        <div class="provider">Polar</div>
+        <div class="provider">Lemon Squeezy</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
