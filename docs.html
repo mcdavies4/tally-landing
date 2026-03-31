@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Docs — Tally Credit Layer API</title>
-  <meta name="description" content="Integrate Tally into your app in under an hour. Full guide for adding, deducting and refunding credits with Stripe, Polar and Lemon Squeezy." />
+  <meta name="description" content="Integrate Tally into your app in under an hour. Full guide for adding, deducting and refunding credits with Stripe, Polar." />
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -371,7 +371,6 @@
       <div class="nav-label">Webhooks</div>
       <a href="#stripe" class="nav-link">Stripe</a>
       <a href="#polar" class="nav-link">Polar</a>
-      <a href="#lemonsqueezy" class="nav-link">Lemon Squeezy</a>
     </div>
 
     <div class="nav-section">
@@ -467,7 +466,7 @@
         <div class="step-num">4</div>
         <div class="step-content">
           <h3>Connect your payment provider</h3>
-          <p>Go to the <strong>Settings tab</strong> in your app dashboard. Copy your webhook URL and paste it into Stripe, Polar or Lemon Squeezy. Credits are added automatically on every successful payment.</p>
+          <p>Go to the <strong>Settings tab</strong> in your app dashboard. Copy your webhook URL and paste it into Stripe or Polar. Credits are added automatically on every successful payment.</p>
         </div>
       </div>
     </div>
@@ -716,22 +715,6 @@ creditsDisplay.textContent = <span class="c-string">`<span class="c-accent">${ba
     <span class="c-accent">tally_credits</span>: <span class="c-string">'500'</span>,
   },
 })</pre>
-      </div>
-    </div>
-
-    <div class="section" id="lemonsqueezy">
-      <h2>Lemon Squeezy</h2>
-      <p>Tally listens for <code>order_created</code> events from Lemon Squeezy.</p>
-
-      <h3 style="margin: 20px 0 10px;">Setup</h3>
-      <p>Go to <strong>Lemon Squeezy → Settings → Webhooks → +</strong>. Paste your Tally webhook URL, add a signing secret, and select <code>order_created</code>.</p>
-
-      <h3 style="margin: 20px 0 10px;">Pass custom data via checkout URL</h3>
-      <div class="code-block">
-        <div class="code-header"><span class="code-lang">URL</span></div>
-        <pre>https://your-store.lemonsqueezy.com/checkout/buy/product-id
-  ?checkout[custom][<span class="c-accent">tally_user_id</span>]=user_001
-  &checkout[custom][<span class="c-accent">tally_credits</span>]=500</pre>
       </div>
     </div>
 
