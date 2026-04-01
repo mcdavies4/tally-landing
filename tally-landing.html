@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Primary SEO -->
+  <title>Tally — Credit Layer API for Developers</title>
+  <meta name="description" content="Stop rebuilding credit logic. Add, deduct and refund user credits in 3 API calls. Works with Stripe and Polar. Free to start." />
+  <meta name="keywords" content="credit API, usage-based billing, SaaS credits, developer tools, Stripe credits, credit balance API, credit tracking" />
+  <meta name="author" content="The 36th Company Ltd" />
+  <link rel="canonical" href="https://tally-landing-ochre.vercel.app" />
+
+  <!-- Open Graph (Facebook, WhatsApp, LinkedIn, iMessage) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://tally-landing-ochre.vercel.app" />
+  <meta property="og:title" content="Tally — Credit Layer API for Developers" />
+  <meta property="og:description" content="Stop rebuilding credit logic. Add, deduct and refund user credits in 3 API calls. Works with Stripe and Polar." />
+  <meta property="og:image" content="https://tally-landing-ochre.vercel.app/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:site_name" content="Tally" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://tally-landing-ochre.vercel.app" />
+  <meta name="twitter:title" content="Tally — Credit Layer API for Developers" />
+  <meta name="twitter:description" content="Stop rebuilding credit logic. Add, deduct and refund user credits in 3 API calls. Works with Stripe and Polar." />
+  <meta name="twitter:image" content="https://tally-landing-ochre.vercel.app/og-image.png" />
+  <meta name="twitter:creator" content="@your_twitter_handle" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="64x64" href="/favicon-64.png" />
+  <link rel="apple-touch-icon" sizes="256x256" href="/apple-touch-icon.png" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0a;
+      --bg-2: #111111;
+      --bg-3: #161616;
+      --border: #1a1a1a;
+      --border-light: #222222;
+      --text: #f0f0f0;
+      --text-2: #888888;
+      --text-3: #555555;
+      --accent: #00ff88;
+      --accent-dim: rgba(0, 255, 136, 0.08);
+      --accent-border: rgba(0, 255, 136, 0.2);
+      --font-display: 'Syne', sans-serif;
+      --font-mono: 'DM Mono', monospace;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: #0a0a0a;
+      color: #f0f0f0;
+    }
+
+    body {
+      background: #0a0a0a !important;
+      color: #f0f0f0 !important;
+      font-family: var(--font-display);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ── Nav ── */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 48px;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: rgba(10,10,10,0.95) !important;
+      backdrop-filter: blur(12px);
+      z-index: 100;
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--accent);
+      letter-spacing: -0.5px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .nav-links a {
+      font-size: 13px;
+      color: var(--text-2);
+      transition: color 0.15s;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+
+    /* ── Buttons ── */
+    .btn {
+      background: var(--accent);
+      color: #000;
+      border: none;
+      padding: 11px 24px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: var(--font-display);
+      transition: opacity 0.15s, transform 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border-light);
+      padding: 11px 24px;
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: pointer;
+      font-family: var(--font-display);
+      transition: border-color 0.15s;
+    }
+
+    .btn-ghost:hover { border-color: #444; }
+
+    /* ── Hero ── */
+    .hero {
+      padding: 110px 48px 90px;
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .badge {
+      display: inline-block;
+      background: var(--accent-dim);
+      border: 1px solid var(--accent-border);
+      color: var(--accent);
+      font-size: 11px;
+      font-family: var(--font-mono);
+      padding: 5px 16px;
+      border-radius: 20px;
+      margin-bottom: 32px;
+      letter-spacing: 0.3px;
+    }
+
+    .hero h1 {
+      font-size: 58px;
+      font-weight: 800;
+      letter-spacing: -2.5px;
+      line-height: 1.05;
+      margin-bottom: 24px;
+    }
+
+    .hero h1 span { color: var(--accent); }
+
+    .hero p {
+      font-size: 17px;
+      color: var(--text-2);
+      line-height: 1.7;
+      max-width: 520px;
+      margin: 0 auto 44px;
+      font-family: var(--font-mono);
+    }
+
+    .cta-row {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* ── Section ── */
+    section { padding: 0 48px 88px; max-width: 960px; margin: 0 auto; }
+
+    .section-label {
+      font-size: 11px;
+      color: var(--text-3);
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      font-size: 34px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 10px;
+    }
+
+    .section-sub {
+      font-size: 14px;
+      color: var(--text-3);
+      font-family: var(--font-mono);
+      margin-bottom: 40px;
+    }
+
+    /* ── Code block ── */
+    .code-tabs {
+      display: flex;
+      gap: 4px;
+    }
+
+    .code-tab {
+      padding: 9px 18px;
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-bottom: none;
+      border-radius: 6px 6px 0 0;
+      font-size: 12px;
+      font-family: var(--font-mono);
+      color: var(--text-3);
+      cursor: pointer;
+      transition: color 0.15s;
+    }
+
+    .code-tab.active {
+      background: var(--bg-3);
+      color: var(--accent);
+      border-color: var(--border-light);
+    }
+
+    .code-block {
+      background: var(--bg-3);
+      border: 1px solid var(--border-light);
+      border-radius: 0 6px 6px 6px;
+      padding: 32px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.9;
+      overflow-x: auto;
+    }
+
+    .code-panel { display: none; }
+    .code-panel.active { display: block; }
+
+    .c-comment { color: #444; }
+    .c-keyword { color: #66b3ff; }
+    .c-string { color: #ffcc00; }
+    .c-number { color: #ff9966; }
+    .c-var { color: #f0f0f0; }
+    .c-accent { color: var(--accent); }
+
+    /* ── Endpoints ── */
+    .endpoints { display: flex; flex-direction: column; gap: 8px; }
+
+    .endpoint {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 13px 18px;
+      transition: border-color 0.15s;
+    }
+
+    .endpoint:hover { border-color: var(--border-light); }
+
+    .method {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 500;
+      padding: 3px 9px;
+      border-radius: 4px;
+      min-width: 44px;
+      text-align: center;
+    }
+
+    .get { background: rgba(102,179,255,0.1); color: #66b3ff; }
+    .post { background: rgba(0,255,136,0.1); color: var(--accent); }
+
+    .endpoint-path {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--text);
+    }
+
+    .endpoint-desc {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-3);
+      margin-left: auto;
+    }
+
+    /* ── Features grid ── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .feature-card {
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      transition: border-color 0.15s, transform 0.15s;
+    }
+
+    .feature-card:hover {
+      border-color: var(--accent-border);
+      transform: translateY(-2px);
+    }
+
+    .feature-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--accent-dim);
+      border: 1px solid var(--accent-border);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      margin-bottom: 16px;
+    }
+
+    .feature-card h3 {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .feature-card p {
+      font-size: 12px;
+      color: var(--text-3);
+      line-height: 1.7;
+      font-family: var(--font-mono);
+    }
+
+    /* ── Pricing ── */
+    .pricing-wrap {
+      max-width: 480px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    @media (max-width: 768px) {
+      #pricing > div[style*="grid"] {
+        grid-template-columns: 1fr 1fr !important;
+      }
+    }
+
+    @media (max-width: 480px) {
+      #pricing > div[style*="grid"] {
+        grid-template-columns: 1fr !important;
+      }
+    }
+
+    .pricing-card {
+      background: var(--bg-2);
+      border: 1px solid var(--border-light);
+      border-radius: 16px;
+      padding: 44px;
+    }
+
+    .price {
+      font-size: 52px;
+      font-weight: 800;
+      letter-spacing: -2px;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .price span {
+      font-size: 20px;
+      color: var(--text-3);
+      font-weight: 400;
+      letter-spacing: 0;
+    }
+
+    .price-sub {
+      font-size: 12px;
+      color: var(--text-3);
+      font-family: var(--font-mono);
+      margin-top: 10px;
+      margin-bottom: 32px;
+    }
+
+    .pricing-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 13px;
+      text-align: left;
+      margin-bottom: 36px;
+    }
+
+    .pricing-features li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13px;
+      color: var(--text-2);
+      font-family: var(--font-mono);
+    }
+
+    .check { color: var(--accent); font-size: 15px; }
+
+    /* ── Divider ── */
+    hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 0 48px 80px;
+    }
+
+    /* ── Footer ── */
+    footer {
+      padding: 28px 48px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    footer p {
+      font-size: 12px;
+      color: var(--text-3);
+      font-family: var(--font-mono);
+    }
+
+    /* ── Grid bg ── */
+    .grid-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(#1a1a1a 1px, transparent 1px),
+        linear-gradient(90deg, #1a1a1a 1px, transparent 1px);
+      background-size: 52px 52px;
+      opacity: 0.25;
+      z-index: 0;
+    }
+
+    main { position: relative; z-index: 1; }
+
+    /* ── Animations ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-up { animation: fadeUp 0.5s ease both; }
+    .delay-1 { animation-delay: 0.08s; }
+    .delay-2 { animation-delay: 0.16s; }
+    .delay-3 { animation-delay: 0.24s; }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      nav { padding: 16px 24px; }
+      .nav-links a { display: none; }
+      .hero { padding: 72px 24px 60px; }
+      .hero h1 { font-size: 38px; letter-spacing: -1.5px; }
+      section { padding: 0 24px 60px; }
+      .features-grid { grid-template-columns: 1fr; }
+      .endpoint-desc { display: none; }
+      hr { margin: 0 24px 60px; }
+      footer { padding: 24px; flex-direction: column; gap: 8px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="grid-bg"></div>
+
+  <nav>
+    <div class="logo">tally</div>
+    <div class="nav-links">
+      <a href="/docs.html">Docs</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#features">Features</a>
+      <a href="https://tally-dashboard-beta.vercel.app/auth"><button class="btn" style="padding: 9px 20px; font-size: 12px;">Get API Key →</button></a>
+    </div>
+  </nav>
+
+  <main>
+    <!-- Hero -->
+    <div class="hero">
+      <div class="badge fade-up">credit layer api · now in beta</div>
+      <h1 class="fade-up delay-1">Stop rebuilding<br><span>credit logic.</span></h1>
+      <p class="fade-up delay-2">Add, deduct and refund user credits in 3 API calls. Works with Stripe and Polar out of the box.</p>
+      <div class="cta-row fade-up delay-3">
+        <a href="https://tally-dashboard-beta.vercel.app/auth"><button class="btn">Start free →</button></a>
+        <a href="#integration"><button class="btn-ghost">View docs</button></a>
+      </div>
+    </div>
+
+    <!-- Integration -->
+    <section id="integration">
+      <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+        <a href="https://www.npmjs.com/package/tally-credits-sdk" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 6px; padding: 8px 14px; font-family: var(--font-mono); font-size: 12px; color: var(--text-2); text-decoration: none; transition: border-color 0.15s;" onmouseover="this.style.borderColor='var(--accent-border)'" onmouseout="this.style.borderColor='var(--border)'">
+          <span style="color: var(--accent);">npm</span> install tally-credits-sdk
+        </a>
+        <a href="/docs.html" style="font-size: 12px; color: var(--text-3); font-family: var(--font-mono); text-decoration: none;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-3)'">Full docs →</a>
+      </div>
+
+      <div class="section-label">Integration in minutes</div>
+      <div class="code-tabs">
+        <div class="code-tab active" onclick="showTab('add', this)">Add credits</div>
+        <div class="code-tab" onclick="showTab('deduct', this)">Deduct credits</div>
+        <div class="code-tab" onclick="showTab('balance', this)">Check balance</div>
+        <div class="code-tab" onclick="showTab('webhook', this)">Stripe webhook</div>
+      </div>
+      <div class="code-block">
+
+        <div class="code-panel active" id="tab-add">
+<span class="c-comment">// When a user pays — top up their credits instantly</span><br>
+<span class="c-keyword">const</span> <span class="c-var">res</span> = <span class="c-keyword">await</span> <span class="c-var">fetch</span>(<span class="c-string">'https://api.usetally.dev/credits/add'</span>, {<br>
+&nbsp;&nbsp;<span class="c-var">method:</span> <span class="c-string">'POST'</span>,<br>
+&nbsp;&nbsp;<span class="c-var">headers:</span> {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-string">'Authorization'</span>: <span class="c-string">`Bearer ${</span><span class="c-number">TALLY_API_KEY</span><span class="c-string">}`</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-string">'Content-Type'</span>: <span class="c-string">'application/json'</span>,<br>
+&nbsp;&nbsp;},<br>
+&nbsp;&nbsp;<span class="c-var">body:</span> <span class="c-var">JSON.stringify</span>({<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-var">user_id:</span> <span class="c-string">'user_abc123'</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-var">amount:</span> <span class="c-number">500</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-var">description:</span> <span class="c-string">'Starter pack purchase'</span>,<br>
+&nbsp;&nbsp;}),<br>
+});<br>
+<br>
+<span class="c-comment">// → { success: true, balance_after: 500 }</span>
+        </div>
+
+        <div class="code-panel" id="tab-deduct">
+<span class="c-comment">// When a user consumes — deduct atomically, no double-spend</span><br>
+<span class="c-keyword">const</span> <span class="c-var">res</span> = <span class="c-keyword">await</span> <span class="c-var">fetch</span>(<span class="c-string">'https://api.usetally.dev/credits/deduct'</span>, {<br>
+&nbsp;&nbsp;<span class="c-var">method:</span> <span class="c-string">'POST'</span>,<br>
+&nbsp;&nbsp;<span class="c-var">headers:</span> {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-string">'Authorization'</span>: <span class="c-string">`Bearer ${</span><span class="c-number">TALLY_API_KEY</span><span class="c-string">}`</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-string">'Content-Type'</span>: <span class="c-string">'application/json'</span>,<br>
+&nbsp;&nbsp;},<br>
+&nbsp;&nbsp;<span class="c-var">body:</span> <span class="c-var">JSON.stringify</span>({<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-var">user_id:</span> <span class="c-string">'user_abc123'</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-var">amount:</span> <span class="c-number">50</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-var">description:</span> <span class="c-string">'AI generation'</span>,<br>
+&nbsp;&nbsp;}),<br>
+});<br>
+<br>
+<span class="c-comment">// → { success: true, balance_after: 450 }</span><br>
+<span class="c-comment">// → 402 if insufficient credits</span>
+        </div>
+
+        <div class="code-panel" id="tab-balance">
+<span class="c-comment">// Check a user's current balance anytime</span><br>
+<span class="c-keyword">const</span> <span class="c-var">res</span> = <span class="c-keyword">await</span> <span class="c-var">fetch</span>(<br>
+&nbsp;&nbsp;<span class="c-string">'https://api.usetally.dev/credits/balance?user_id=user_abc123'</span>,<br>
+&nbsp;&nbsp;{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-var">headers:</span> {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-string">'Authorization'</span>: <span class="c-string">`Bearer ${</span><span class="c-number">TALLY_API_KEY</span><span class="c-string">}`</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;}<br>
+);<br>
+<br>
+<span class="c-keyword">const</span> { <span class="c-var">balance</span> } = <span class="c-keyword">await</span> <span class="c-var">res.json</span>();<br>
+<br>
+<span class="c-comment">// → { user_id: 'user_abc123', balance: 450 }</span>
+        </div>
+
+        <div class="code-panel" id="tab-webhook">
+<span class="c-comment">// Point your Stripe webhook here — Tally handles the rest</span><br>
+<span class="c-comment">// No code needed on your end beyond the metadata</span><br>
+<br>
+<span class="c-keyword">const</span> <span class="c-var">paymentIntent</span> = <span class="c-keyword">await</span> <span class="c-var">stripe.paymentIntents.create</span>({<br>
+&nbsp;&nbsp;<span class="c-var">amount:</span> <span class="c-number">1000</span>,<br>
+&nbsp;&nbsp;<span class="c-var">currency:</span> <span class="c-string">'gbp'</span>,<br>
+&nbsp;&nbsp;<span class="c-var">metadata:</span> {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-accent">tally_user_id:</span> <span class="c-string">'user_abc123'</span>,  <span class="c-comment">// ← who to credit</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="c-accent">tally_credits:</span> <span class="c-string">'500'</span>,         <span class="c-comment">// ← how many credits</span><br>
+&nbsp;&nbsp;},<br>
+});<br>
+<br>
+<span class="c-comment">// On payment success, Tally auto-credits the user.</span><br>
+<span class="c-comment">// Idempotent — safe to retry.</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- API Surface -->
+    <section>
+      <div class="section-label">API surface</div>
+      <div class="endpoints">
+        <div class="endpoint">
+          <span class="method post">POST</span>
+          <span class="endpoint-path">/credits/add</span>
+          <span class="endpoint-desc">Top up a user's balance</span>
+        </div>
+        <div class="endpoint">
+          <span class="method post">POST</span>
+          <span class="endpoint-path">/credits/deduct</span>
+          <span class="endpoint-desc">Atomic deduction with overflow protection</span>
+        </div>
+        <div class="endpoint">
+          <span class="method post">POST</span>
+          <span class="endpoint-path">/credits/refund</span>
+          <span class="endpoint-desc">Reverse any transaction by ledger ID</span>
+        </div>
+        <div class="endpoint">
+          <span class="method get">GET</span>
+          <span class="endpoint-path">/credits/balance</span>
+          <span class="endpoint-desc">Current balance for a user</span>
+        </div>
+        <div class="endpoint">
+          <span class="method get">GET</span>
+          <span class="endpoint-path">/credits/history</span>
+          <span class="endpoint-desc">Paginated audit log per user</span>
+        </div>
+        <div class="endpoint">
+          <span class="method post">POST</span>
+          <span class="endpoint-path">/webhooks/stripe</span>
+          <span class="endpoint-desc">Auto top-up on Stripe payment success</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features">
+      <div class="section-label">Why Tally</div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3>No race conditions</h3>
+          <p>Atomic deductions using row-level locking. Two simultaneous requests can't double-spend the same credits.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔁</div>
+          <h3>Idempotent by default</h3>
+          <p>Pass an idempotency key and Stripe webhooks will never credit a user twice, even on retries.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📒</div>
+          <h3>Immutable ledger</h3>
+          <p>Every event is written as an immutable row. Full audit trail for every add, deduct, and refund.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔌</div>
+          <h3>Provider agnostic</h3>
+          <p>Works with Stripe and Polar, or any manual top-up flow. No lock-in.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">👤</div>
+          <h3>Auto user creation</h3>
+          <p>Pass any user ID. Tally creates the user and initialises their balance automatically on first call.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <h3>Dashboard included</h3>
+          <p>See all your users, balances, and full transaction history in a clean developer dashboard.</p>
+        </div>
+      </div>
+    </section>
+
+    <hr />
+
+    <!-- Pricing -->
+    <section id="pricing">
+      <div class="section-label" style="text-align: center;">Simple pricing</div>
+      <h2 class="section-title" style="text-align: center;">Pay as you grow</h2>
+      <p class="section-sub" style="text-align: center; margin-bottom: 40px;">Flat monthly pricing. No percentage of revenue. No surprises.</p>
+
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; max-width: 960px; margin: 0 auto;">
+
+        <!-- Free -->
+        <div class="pricing-card" style="padding: 24px; display: flex; flex-direction: column;">
+          <div style="font-size: 13px; font-weight: 700; margin-bottom: 8px;">Free</div>
+          <div class="price" style="font-size: 32px; margin-bottom: 4px;">$0<span style="font-size: 14px;">/mo</span></div>
+          <p class="price-sub" style="margin-bottom: 20px;">Get started, no card needed</p>
+          <ul class="pricing-features" style="flex: 1; margin-bottom: 20px;">
+            <li><span class="check">✓</span> 3 apps</li>
+            <li><span class="check">✓</span> 100 users</li>
+            <li><span class="check">✓</span> Full ledger history</li>
+            <li><span class="check">✓</span> Community support</li>
+          </ul>
+          <a href="https://tally-dashboard-beta.vercel.app/auth" style="display: block;">
+            <button class="btn-ghost" style="width: 100%; padding: 12px; font-size: 13px; text-align: center; cursor: pointer;">
+              Start free →
+            </button>
+          </a>
+        </div>
+
+        <!-- Starter -->
+        <div class="pricing-card" style="padding: 24px; display: flex; flex-direction: column;">
+          <div style="font-size: 13px; font-weight: 700; margin-bottom: 8px;">Starter</div>
+          <div class="price" style="font-size: 32px; margin-bottom: 4px;">$9<span style="font-size: 14px;">/mo</span></div>
+          <p class="price-sub" style="margin-bottom: 20px;">For indie developers</p>
+          <ul class="pricing-features" style="flex: 1; margin-bottom: 20px;">
+            <li><span class="check">✓</span> Unlimited apps</li>
+            <li><span class="check">✓</span> 1,000 users</li>
+            <li><span class="check">✓</span> Full ledger history</li>
+            <li><span class="check">✓</span> Email support</li>
+          </ul>
+          <a href="https://tally-dashboard-beta.vercel.app/auth" style="display: block;">
+            <button class="btn-ghost" style="width: 100%; padding: 12px; font-size: 13px; text-align: center; cursor: pointer;">
+              Get started →
+            </button>
+          </a>
+        </div>
+
+        <!-- Growth (popular) -->
+        <div class="pricing-card" style="padding: 24px; display: flex; flex-direction: column; border-color: rgba(0,255,136,0.3); position: relative;">
+          <div style="position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: #00ff88; color: #000; font-size: 10px; font-weight: 700; padding: 3px 12px; border-radius: 20px; white-space: nowrap; font-family: 'DM Mono', monospace;">MOST POPULAR</div>
+          <div style="font-size: 13px; font-weight: 700; margin-bottom: 8px;">Growth</div>
+          <div class="price" style="font-size: 32px; margin-bottom: 4px; color: #00ff88;">$29<span style="font-size: 14px; color: var(--text-3);">/mo</span></div>
+          <p class="price-sub" style="margin-bottom: 20px;">For growing products</p>
+          <ul class="pricing-features" style="flex: 1; margin-bottom: 20px;">
+            <li><span class="check">✓</span> Unlimited apps</li>
+            <li><span class="check">✓</span> 10,000 users</li>
+            <li><span class="check">✓</span> Full ledger history</li>
+            <li><span class="check">✓</span> Priority support</li>
+          </ul>
+          <a href="https://tally-dashboard-beta.vercel.app/auth" style="display: block;">
+            <button class="btn" style="width: 100%; padding: 12px; font-size: 13px; justify-content: center;">
+              Get started →
+            </button>
+          </a>
+        </div>
+
+        <!-- Scale -->
+        <div class="pricing-card" style="padding: 24px; display: flex; flex-direction: column;">
+          <div style="font-size: 13px; font-weight: 700; margin-bottom: 8px;">Scale</div>
+          <div class="price" style="font-size: 32px; margin-bottom: 4px;">$79<span style="font-size: 14px;">/mo</span></div>
+          <p class="price-sub" style="margin-bottom: 20px;">For scaling teams</p>
+          <ul class="pricing-features" style="flex: 1; margin-bottom: 20px;">
+            <li><span class="check">✓</span> Unlimited apps</li>
+            <li><span class="check">✓</span> Unlimited users</li>
+            <li><span class="check">✓</span> Full ledger history</li>
+            <li><span class="check">✓</span> SLA + priority support</li>
+          </ul>
+          <a href="https://tally-dashboard-beta.vercel.app/auth" style="display: block;">
+            <button class="btn-ghost" style="width: 100%; padding: 12px; font-size: 13px; text-align: center; cursor: pointer;">
+              Get started →
+            </button>
+          </a>
+        </div>
+
+      </div>
+
+      <p style="text-align: center; margin-top: 24px; font-size: 12px; color: var(--text-3); font-family: 'DM Mono', monospace;">
+        Flat monthly pricing. No percentage of revenue. No sales calls.
+      </p>
+    </section>
+
+    <hr />
+
+    <footer>
+      <div class="logo">tally</div>
+      <p>Built for developers who want to ship, not plumb.</p>
+      <p>© 2026 The 36th Company Ltd</p>
+    </footer>
+  </main>
+
+  <script>
+    function showTab(name, el) {
+      document.querySelectorAll('.code-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+      document.getElementById('tab-' + name).classList.add('active');
+      el.classList.add('active');
+    }
+
+    // Fade in on scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.style.opacity = '1';
+          e.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.feature-card, .endpoint, .pricing-card').forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(12px)';
+      el.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+      observer.observe(el);
+    });
+  </script>
+</body>
+</html>

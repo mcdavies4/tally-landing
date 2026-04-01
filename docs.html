@@ -395,6 +395,11 @@
         <div class="step-content">
           <h3>Create an account</h3>
           <p>Sign up at <a href="https://tally-dashboard-beta.vercel.app/auth" style="color: var(--accent);">tally-dashboard-beta.vercel.app</a> and create your first app. You'll get an API key automatically.</p>
+          <p style="margin-top: 12px;">Then install the SDK:</p>
+          <div class="code-block">
+            <div class="code-header"><span class="code-lang">Terminal</span></div>
+            <pre>npm install tally-credits-sdk</pre>
+          </div>
         </div>
       </div>
 
@@ -432,33 +437,41 @@
         <div class="step-content">
           <h3>Deduct credits when a user acts</h3>
           <p>Call deduct every time a user consumes something in your app.</p>
-          <div class="code-block">
-            <div class="code-header">
-              <span class="code-lang">JavaScript</span>
-              <button class="copy-btn" onclick="copy(this, '')">copy</button>
+
+          <div class="tabs">
+            <div class="tab active" onclick="switchTab(this, 'sdk-deduct')">SDK</div>
+            <div class="tab" onclick="switchTab(this, 'fetch-deduct')">Raw fetch</div>
+          </div>
+          <div class="code-block" style="border-radius: 0 6px 6px 6px;">
+            <div id="sdk-deduct" class="tab-panel active">
+              <div class="code-header"><span class="code-lang">JavaScript</span><button class="copy-btn" onclick="copy(this,'')">copy</button></div>
+              <pre><span class="c-keyword">const</span> result = <span class="c-keyword">await</span> tally.credits.deduct({
+  user_id: <span class="c-string">'user_001'</span>,
+  amount: <span class="c-number">10</span>,
+  description: <span class="c-string">'AI generation'</span>,
+})
+
+<span class="c-keyword">if</span> (!result.success) {
+  <span class="c-comment">// User is out of credits</span>
+  <span class="c-keyword">return</span> res.status(<span class="c-number">402</span>).json({ error: <span class="c-string">'Insufficient credits'</span> })
+}
+<span class="c-comment">// { success: true, balance_after: 90 }</span></pre>
             </div>
-            <pre><span class="c-keyword">const</span> res = <span class="c-keyword">await</span> fetch(<span class="c-string">'https://api.usetally.dev/credits/deduct'</span>, {
+            <div id="fetch-deduct" class="tab-panel">
+              <div class="code-header"><span class="code-lang">JavaScript</span><button class="copy-btn" onclick="copy(this,'')">copy</button></div>
+              <pre><span class="c-keyword">const</span> res = <span class="c-keyword">await</span> fetch(<span class="c-string">'https://YOUR_API_URL/credits/deduct'</span>, {
   method: <span class="c-string">'POST'</span>,
   headers: {
     <span class="c-string">'Authorization'</span>: <span class="c-string">'Bearer YOUR_API_KEY'</span>,
     <span class="c-string">'Content-Type'</span>: <span class="c-string">'application/json'</span>,
   },
-  body: JSON.stringify({
-    user_id: <span class="c-string">'user_001'</span>,
-    amount: <span class="c-number">10</span>,
-    description: <span class="c-string">'AI generation'</span>,
-  })
+  body: JSON.stringify({ user_id: <span class="c-string">'user_001'</span>, amount: <span class="c-number">10</span> })
 })
-
 <span class="c-keyword">const</span> data = <span class="c-keyword">await</span> res.json()
-
 <span class="c-keyword">if</span> (!data.success) {
-  <span class="c-comment">// User is out of credits — prompt them to top up</span>
   <span class="c-keyword">return</span> res.status(<span class="c-number">402</span>).json({ error: <span class="c-string">'Insufficient credits'</span> })
-}
-
-<span class="c-comment">// Proceed with the action</span>
-<span class="c-comment">// { success: true, balance_after: 90 }</span></pre>
+}</pre>
+            </div>
           </div>
         </div>
       </div>
@@ -914,6 +927,18 @@ useEffect(() => {
   </main>
 
   <script>
+    // Tab switcher for SDK/fetch examples
+    function switchTab(el, panelId) {
+      const block = el.closest('.step-content') || el.closest('.section')
+      const tabs = el.parentElement.querySelectorAll('.tab')
+      const panels = block.querySelectorAll('.tab-panel')
+      tabs.forEach(t => t.classList.remove('active'))
+      panels.forEach(p => p.classList.remove('active'))
+      el.classList.add('active')
+      const panel = document.getElementById(panelId)
+      if (panel) panel.classList.add('active')
+    }
+
     // Highlight active nav link on scroll
     const sections = document.querySelectorAll('.section')
     const navLinks = document.querySelectorAll('.nav-link')
