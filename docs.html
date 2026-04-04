@@ -371,6 +371,7 @@
       <div class="nav-label">Webhooks</div>
       <a href="#stripe" class="nav-link">Stripe</a>
       <a href="#polar" class="nav-link">Polar</a>
+      <a href="#paddle" class="nav-link">Paddle</a>
     </div>
 
     <div class="nav-section">
@@ -480,7 +481,7 @@
         <div class="step-num">4</div>
         <div class="step-content">
           <h3>Connect your payment provider</h3>
-          <p>Go to the <strong>Settings tab</strong> in your app dashboard. Copy your webhook URL and paste it into Stripe or Polar. Credits are added automatically on every successful payment.</p>
+          <p>Go to the <strong>Settings tab</strong> in your app dashboard. Copy your webhook URL and paste it into Stripe, Polar or Paddle. Credits are added automatically on every successful payment.</p>
         </div>
       </div>
     </div>
@@ -916,6 +917,44 @@ useEffect(() => {
       <div class="alert alert-warn">
         ⚠ Never call the Tally API directly from your frontend. Always proxy through your backend to keep your API key secret.
       </div>
+    </div>
+
+
+    <hr />
+
+    <!-- Paddle webhook -->
+    <div class="section" id="paddle">
+      <div class="section-tag">Webhooks</div>
+      <h2>Paddle</h2>
+      <p>Connect your Paddle account to Tally so credits are added automatically when a user pays.</p>
+
+      <h3 style="margin: 24px 0 10px;">1. Copy your webhook URL</h3>
+      <p>Go to your app in the Tally dashboard → <strong>Settings</strong> → <strong>Webhook URLs</strong> → copy the <strong>Paddle</strong> URL.</p>
+
+      <h3 style="margin: 24px 0 10px;">2. Add it to Paddle</h3>
+      <p>In your Paddle dashboard go to <strong>Developer Tools → Notifications → New destination</strong>. Paste the URL, select <code>transaction.completed</code>, and save. Paddle will show you a secret key — copy it and paste it into the <strong>Paddle webhook secret</strong> field in your Tally settings.</p>
+
+      <h3 style="margin: 24px 0 10px;">3. Pass tally_user_id in checkout</h3>
+      <p>When opening a Paddle checkout, pass the user's ID in <code>customData</code> so Tally knows who to credit.</p>
+
+      <div class="code-block">
+        <div class="code-header"><span class="code-lang">JavaScript</span><button class="copy-btn" onclick="copy(this,'')">copy</button></div>
+        <pre><span class="c-comment">// Paddle.js checkout</span>
+paddle.Checkout.open({
+  items: [{ priceId: <span class="c-string">'pri_xxx'</span>, quantity: <span class="c-number">1</span> }],
+  customData: {
+    <span class="c-accent">tally_user_id</span>: <span class="c-string">'user_001'</span>,   <span class="c-comment">// who to credit</span>
+    <span class="c-accent">tally_credits</span>: <span class="c-string">'500'</span>,         <span class="c-comment">// optional — or use credit_rate in settings</span>
+  }
+})</pre>
+      </div>
+
+      <div class="alert alert-tip">
+        ✓ If you don't pass <code>tally_credits</code>, Tally uses your app's <strong>credit rate</strong> setting to convert the payment amount into credits automatically.
+      </div>
+
+      <h3 style="margin: 24px 0 10px;">That's it</h3>
+      <p>When a user pays, Paddle fires <code>transaction.completed</code> → Tally verifies the signature using your secret → credits are added atomically. Idempotent — safe to retry.</p>
     </div>
 
     <!-- Footer -->
