@@ -17,6 +17,7 @@
   <meta property="og:title" content="Tally — Credit Layer API for Developers" />
   <meta property="og:description" content="Stop rebuilding credit logic. Add, deduct and refund user credits in 3 API calls. Works with Stripe and Polar." />
   <meta property="og:image" content="https://tally-landing-ochre.vercel.app/og-image.png" />
+  <meta property="og:image:type" content="image/png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:site_name" content="Tally" />
@@ -27,7 +28,8 @@
   <meta name="twitter:title" content="Tally — Credit Layer API for Developers" />
   <meta name="twitter:description" content="Stop rebuilding credit logic. Add, deduct and refund user credits in 3 API calls. Works with Stripe and Polar." />
   <meta name="twitter:image" content="https://tally-landing-ochre.vercel.app/og-image.png" />
-  <meta name="twitter:creator" content="@your_twitter_handle" />
+  <meta name="twitter:creator" content="@mcdavies4" />
+  <meta name="twitter:domain" content="tally-landing-ochre.vercel.app" />
 
   <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
@@ -490,7 +492,7 @@
   <nav>
     <div class="logo">tally</div>
     <div class="nav-links">
-      <a href="#integration">Docs</a>
+      <a href="/docs.html">Docs</a>
       <a href="#pricing">Pricing</a>
       <a href="#features">Features</a>
       <a href="https://tally-dashboard-beta.vercel.app/auth"><button class="btn" style="padding: 9px 20px; font-size: 12px;">Get API Key →</button></a>
@@ -511,6 +513,13 @@
 
     <!-- Integration -->
     <section id="integration">
+      <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+        <a href="https://www.npmjs.com/package/tally-credits-sdk" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 6px; padding: 8px 14px; font-family: var(--font-mono); font-size: 12px; color: var(--text-2); text-decoration: none; transition: border-color 0.15s;" onmouseover="this.style.borderColor='var(--accent-border)'" onmouseout="this.style.borderColor='var(--border)'">
+          <span style="color: var(--accent);">npm</span> install tally-credits-sdk
+        </a>
+        <a href="/docs.html" style="font-size: 12px; color: var(--text-3); font-family: var(--font-mono); text-decoration: none;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-3)'">Full docs →</a>
+      </div>
+
       <div class="section-label">Integration in minutes</div>
       <div class="code-tabs">
         <div class="code-tab active" onclick="showTab('add', this)">Add credits</div>
